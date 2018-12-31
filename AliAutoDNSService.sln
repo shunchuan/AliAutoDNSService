@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AliAutoDNSService", "AliAutoDNSService.csproj", "{211BE22D-8C4C-4F01-A649-174CB92E634D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AliAutoDNSService", "AliAutoDNSService\AliAutoDNSService.csproj", "{2B8150EC-26C8-44FD-811F-C341575900D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AliHelper", "AliHelper\AliHelper.csproj", "{BBE8FD10-A9CE-4C05-B8EA-EC42563216A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{211BE22D-8C4C-4F01-A649-174CB92E634D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{211BE22D-8C4C-4F01-A649-174CB92E634D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{211BE22D-8C4C-4F01-A649-174CB92E634D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{211BE22D-8C4C-4F01-A649-174CB92E634D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B8150EC-26C8-44FD-811F-C341575900D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B8150EC-26C8-44FD-811F-C341575900D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B8150EC-26C8-44FD-811F-C341575900D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B8150EC-26C8-44FD-811F-C341575900D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBE8FD10-A9CE-4C05-B8EA-EC42563216A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBE8FD10-A9CE-4C05-B8EA-EC42563216A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBE8FD10-A9CE-4C05-B8EA-EC42563216A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBE8FD10-A9CE-4C05-B8EA-EC42563216A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6048BAF0-5766-4C11-889D-C0D30A68AF5E}
+		SolutionGuid = {23EC9529-4DD8-424A-8BEA-B816F20F0990}
 	EndGlobalSection
 EndGlobal

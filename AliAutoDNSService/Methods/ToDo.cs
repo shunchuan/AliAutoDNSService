@@ -16,8 +16,6 @@ namespace AliAutoDNSService.Methods
 {
     public class ToDo
     {
-        private static string nowIp = "127.0.0.1";
-
         /// <summary>
         /// 自动修改DNS解析系统运行
         /// </summary>

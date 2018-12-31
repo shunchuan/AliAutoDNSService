@@ -1,4 +1,9 @@
-﻿using System.ServiceProcess;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.ServiceProcess;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AliAutoDNSService
 {
@@ -7,15 +12,8 @@ namespace AliAutoDNSService
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
-        static void Main() {
-            //AliAutoDNSService service = new AliAutoDNSService();
-            //service.Test(null);
-
-            //while (true)
-            //{
-            //    System.Threading.Thread.Sleep(1000);
-            //}
-            //return;
+        static void Main()
+        {
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
@@ -25,5 +23,3 @@ namespace AliAutoDNSService
         }
     }
 }
-
-
