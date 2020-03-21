@@ -16,6 +16,10 @@ namespace AliAutoDNSService.Methods
 {
     public class ToDo
     {
+
+        private bool IsStop { set; get; }
+        private readonly object _lockObj = new object();
+
         /// <summary>
         /// 自动修改DNS解析系统运行
         /// </summary>
@@ -37,12 +41,24 @@ namespace AliAutoDNSService.Methods
             Console.Read();
         }
 
+        public void Stop()
+        {
+            lock (_lockObj)
+            {
+                IsStop = true;
+            }
+        }
+
         /// <summary>
         /// 执行循环
         /// </summary>
         /// <param name="config">配置文件</param>
         private void LoopRun(Config config)
         {
+            lock (_lockObj)
+            {
+                IsStop = false;
+            }
             var times = 0;
             while (true)
             {
@@ -61,41 +77,51 @@ namespace AliAutoDNSService.Methods
                 try
                 {
                     Thread.Sleep(config.SystemSleepTime);
-                    IPHelper iPHelper = new IPHelper();
-                    config.NowPublicNetIP = iPHelper.getExternalIP();
-                    //config.NowPublicNetIP = iPHelper.getLocalIP(config.GetPublicNetIPUrl);
-                    if (string.IsNullOrWhiteSpace(config.NowPublicNetIP))
+                    lock (_lockObj)
                     {
-                        // 未获取到IP，则继续
-                        continue;
+                        if (IsStop)
+                        {
+                            break;
+                        }
+                        IPHelper iPHelper = new IPHelper();
+                        config.NowPublicNetIP = iPHelper.GetExternalIp();
+                        //config.NowPublicNetIP = iPHelper.getLocalIP(config.GetPublicNetIPUrl);
+                        if (string.IsNullOrWhiteSpace(config.NowPublicNetIP))
+                        {
+                            // 未获取到IP，则继续
+                            continue;
+                        }
+                        if (config.NowPublicNetIP == config.LastPublicNetIP)
+                        {
+                            // 如果与之前IP相同，则不调用阿里云接口检查是否需要更新
+                            continue;
+                        }
+                        var domainRecordsResult = GetDescribeDomainRecords(config);
+                        var checkStatus = CheckAddOrUpdate(config, domainRecordsResult);
+                        switch (checkStatus)
+                        {
+                            case AddOrUpdate.STAY:
+                                config.LastPublicNetIP = config.NowPublicNetIP;
+                                continue;
+                            case AddOrUpdate.ADD:
+                                AddDomainRecord(config);
+                                config.LastPublicNetIP = config.NowPublicNetIP;
+                                break;
+                            case AddOrUpdate.UPDATE:
+                                UpdateDomainRecord(config);
+                                config.LastPublicNetIP = config.NowPublicNetIP;
+                                break;
+                            case AddOrUpdate.DELETE:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                        Log.ConsoleWrite("解析记录成功！" +
+                                "解析地址：" + config.SetDNSHostRecord + "." + config.SetDNSDomainName + ";" +
+                                "当前IP：" + config.LastPublicNetIP
+                                );
+                        Log.ConsoleWriteNoDate("继续监视中...");
                     }
-                    if (config.NowPublicNetIP == config.LastPublicNetIP)
-                    {
-                        // 如果与之前IP相同，则不调用阿里云接口检查是否需要更新
-                        continue;
-                    }
-                    var domainRecordsResult = GetDescribeDomainRecords(config);
-                    var checkStatus = CheckAddOrUpdate(config, domainRecordsResult);
-                    if (checkStatus == AddOrUpdate.STAY)
-                    {
-                        config.LastPublicNetIP = config.NowPublicNetIP;
-                        continue;
-                    }
-                    else if (checkStatus == AddOrUpdate.ADD)
-                    {
-                        AddDomainRecord(config);
-                        config.LastPublicNetIP = config.NowPublicNetIP;
-                    }
-                    else if (checkStatus == AddOrUpdate.UPDATE)
-                    {
-                        UpdateDomainRecord(config);
-                        config.LastPublicNetIP = config.NowPublicNetIP;
-                    }
-                    Log.ConsoleWrite("解析记录成功！" +
-                            "解析地址：" + config.SetDNSHostRecord + "." + config.SetDNSDomainName + ";" +
-                            "当前IP：" + config.LastPublicNetIP
-                            );
-                    Log.ConsoleWriteNoDate("继续监视中...");
                 }
                 catch (System.Net.Http.HttpRequestException ex)
                 {
@@ -169,10 +195,12 @@ namespace AliAutoDNSService.Methods
         {
             // 不做分页，取最大值500
             var pageSize = "500";
-            DescribeDomainRecordsModel model = new DescribeDomainRecordsModel();
-            model.DomainName = config.SetDNSDomainName;
-            model.RRKeyWord = config.SetDNSHostRecord;
-            model.PageSize = pageSize;
+            var model = new DescribeDomainRecordsModel
+            {
+                DomainName = config.SetDNSDomainName,
+                RRKeyWord = config.SetDNSHostRecord,
+                PageSize = pageSize
+            };
             var uri = API.GetDescribeDomainRecords(config.AccessKeyId, config.AccessKeySecret, model);
             var url = config.AliAPIUrl + uri;
             return HttpUtility.Get(url);

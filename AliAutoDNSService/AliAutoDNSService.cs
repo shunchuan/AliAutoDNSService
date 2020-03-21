@@ -15,6 +15,7 @@ namespace AliAutoDNSService
     public partial class AliAutoDNSService : ServiceBase
     {
         private Thread worker;
+        private readonly ToDo MethodToDo = new ToDo();
         public AliAutoDNSService()
         {
             InitializeComponent();
@@ -42,17 +43,19 @@ namespace AliAutoDNSService
 
 
 
-public void Test(string[] args)
+    public void Test(string[] args)
         {
             OnStart(args);
         }
 
-        protected override void OnStart(string[] args)
+    protected override void OnStart(string[] args)
         {
             try
             {
-                worker = new Thread(new Methods.ToDo().Run);
-                worker.IsBackground = true;
+                worker = new Thread(MethodToDo.Run)
+                {
+                    IsBackground = true
+                };
                 worker.Start();
             }
             catch (Exception ex)
@@ -67,6 +70,7 @@ public void Test(string[] args)
             try
             {
                 Log.ConsoleWrite("服务开始停止");
+                MethodToDo.Stop();
                 worker.Abort();
                 Log.ConsoleWrite("服务已停止");
                 base.OnStop();

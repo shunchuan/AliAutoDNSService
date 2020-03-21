@@ -5,9 +5,11 @@
 - V1.0.1
   - 程序包添加Readme文件
   - 删除原配置文件中无效键
+- V1.1.0
+  - 解决无法停止/重启服务的Bug
 
 # 当前版本
-- V1.0.1
+- V1.1.0
 
 ## 目的
 - 家庭网络一般都被运营商nat了，即使设置端口映射也行不通，需要和运营商联系（我装宽带的时候直接跟安装师傅说需要公网IP，然后就给我开通了）
@@ -19,7 +21,7 @@
 
 ## 使用者
 - 首先注册阿里云账户，购买阿里云域名，前往AccessKeys获取具有管理云解析(DNS)权限的AccessKeyId和AccessKeySecret；
-- 下载[压缩文件](https://github.com/shunchuan/AliAutoDNSService/tree/master/AliAutoDNSService/software/AliAutoDNSService_v1.0.1.rar)，解压到运行路径；
+- 下载[压缩文件](https://github.com/shunchuan/AliAutoDNSService/tree/master/AliAutoDNSService/software/AliAutoDNSService_v1.1.0.rar)，解压到运行路径；
 - 修改.config配置文件中的value值，根据个人实际情况修改；
 - 一般修改```AccessKeyId```、```AccessKeySecret```、```SetDNSDomainName```、```SetDNSHostRecord```、```BootFromBoot```即可；
 - 注意：如果你域名下的解析记录很多(成百上千，否则可忽略)，解析主机记录尽量写的与其他记录无重叠，目前只查询前500条过滤数据进行筛选。比如要解析abc记录，不要有500个以上的包含abc字段的主机记录存在。

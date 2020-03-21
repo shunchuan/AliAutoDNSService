@@ -29,7 +29,7 @@ namespace AliAutoDNSService.Methods
             }
         }
 
-        public string getExternalIP()
+        public string GetExternalIp()
         {
             try
             {
