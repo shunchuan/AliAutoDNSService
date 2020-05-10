@@ -83,8 +83,7 @@ namespace AliAutoDNSService.Methods
                         {
                             break;
                         }
-                        IPHelper iPHelper = new IPHelper();
-                        config.NowPublicNetIP = iPHelper.GetExternalIp();
+                        config.NowPublicNetIP = HttpUtility.GetExternalIp();
                         //config.NowPublicNetIP = iPHelper.getLocalIP(config.GetPublicNetIPUrl);
                         if (string.IsNullOrWhiteSpace(config.NowPublicNetIP))
                         {

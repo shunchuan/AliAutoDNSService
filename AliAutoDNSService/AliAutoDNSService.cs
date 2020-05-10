@@ -43,15 +43,17 @@ namespace AliAutoDNSService
 
 
 
-    public void Test(string[] args)
+        public void Test(string[] args)
         {
             OnStart(args);
         }
 
-    protected override void OnStart(string[] args)
+        protected override void OnStart(string[] args)
         {
             try
             {
+
+                Log.ConsoleWrite("正在启动线程...");
                 worker = new Thread(MethodToDo.Run)
                 {
                     IsBackground = true
@@ -77,7 +79,7 @@ namespace AliAutoDNSService
             }
             catch (Exception ex)
             {
-                Log.ConsoleWrite(ex.StackTrace+ ex.Message);
+                Log.ConsoleWrite(ex.StackTrace + ex.Message);
             }
         }
     }
