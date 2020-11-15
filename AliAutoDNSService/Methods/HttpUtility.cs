@@ -12,17 +12,30 @@ namespace AliAutoDNSService.Methods
     {
         public static string Get(string url)
         {
-            var handler = new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.None };
-            using (var httpClient = new HttpClient(handler))
+            try
             {
-                httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                var httpResponseMessage = httpClient.GetAsync(url).Result;
-                var result= httpResponseMessage.Content.ReadAsStringAsync().Result;
-                if (httpResponseMessage.StatusCode == HttpStatusCode.OK)
+                //Log.ConsoleWrite($"Get Url is {url}");
+                var handler = new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.None };
+                using (var httpClient = new HttpClient(handler))
                 {
-                    return result;
+                    httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                    //2020-11-15解决请求阿里云接口失败的问题，错误信息【基础连接已经关闭: 发送时发生错误】
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                    //
+                    var httpResponseMessage = httpClient.GetAsync(url).Result;
+                    var result = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                    if (httpResponseMessage.StatusCode == HttpStatusCode.OK)
+                    {
+                        return result;
+                    }
+                    else throw new HttpRequestException(httpResponseMessage.Content.ReadAsStringAsync().Result);
                 }
-                else throw new HttpRequestException(httpResponseMessage.Content.ReadAsStringAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                Log.ConsoleWrite("请求失败！");
+                Log.ConsoleWriteNoDate($"Get Url is {url},Exception is {ex.Message}");
+                throw ex;
             }
         }
 
