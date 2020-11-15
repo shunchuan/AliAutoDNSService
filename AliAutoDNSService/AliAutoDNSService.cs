@@ -73,7 +73,11 @@ namespace AliAutoDNSService
             {
                 Log.ConsoleWrite("服务开始停止");
                 MethodToDo.Stop();
-                worker.Abort();
+                while (!MethodToDo.IsStoped)
+                {
+                    Thread.Sleep(1000);
+                }
+                //worker.Abort();
                 Log.ConsoleWrite("服务已停止");
                 base.OnStop();
             }
