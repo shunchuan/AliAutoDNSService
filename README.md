@@ -26,7 +26,7 @@
 
 ## 使用者
 - 首先注册阿里云账户，购买阿里云域名，前往AccessKeys获取具有管理云解析(DNS)权限的AccessKeyId和AccessKeySecret；
-- 下载[压缩文件](https://github.com/shunchuan/AliAutoDNSService/tree/master/AliAutoDNSService/software/AliAutoDNSService_v1.3.0.zip)，解压到运行路径；
+- 下载[压缩文件](https://github.com/shunchuan/AliAutoDNSService/releases/tag/V1.3.0)，解压到运行路径；
 - 修改.config配置文件中的value值，根据个人实际情况修改；
 - 一般修改```AccessKeyId```、```AccessKeySecret```、```SetDNSDomainName```、```SetDNSHostRecord```、```BootFromBoot```即可；
 - 注意：如果你域名下的解析记录很多(成百上千，否则可忽略)，解析主机记录尽量写的与其他记录无重叠，目前只查询前500条过滤数据进行筛选。比如要解析abc记录，不要有500个以上的包含abc字段的主机记录存在。
